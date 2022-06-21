@@ -6,17 +6,21 @@ from django.shortcuts import render
 from project.check import Check, Game
 
 
+counter = {'counter': 0,}
+
 def index_view(request):
     context = {}
     secret_nums = [5, 1, 2, 9]
-
     if request.method == 'GET':
         return render(request, "index.html")
 
     elif request.method == 'POST':
+        counter['counter'] += 1
         context = {
             'numbers': request.POST.get('numbers'),
         }
+
+
         u_number = context['numbers'].split()
         user_num = Check(u_number)
         if user_num.check_len() == False:
@@ -29,8 +33,22 @@ def index_view(request):
             context['result'] = 'Numbers must not be repeated <br>Please enter the numbers so that they do not repeat'
         else:
             cow, bull = Game.play(u_number, secret_nums)
+            context['bull'] = bull
+            context['cow'] = cow
+
+            counter['bull'] = context['bull']
+            counter['cow'] = context['cow']
             if bull == 4:
                 context['result'] = 'You got it right!'
             else:
                 context['result'] = f'You got {bull} bulls, {cow} cows'
+        print(counter)
         return render(request, 'index.html', context)
+
+print(counter)
+def history_view(request):
+    context = {}
+    context['counter'] = counter['counter']
+    context['bull'] = counter['bull']
+    context['cow'] = counter['cow']
+    return render(request, 'history.html',context)
