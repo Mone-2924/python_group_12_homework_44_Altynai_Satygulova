@@ -31,17 +31,18 @@ class Check():
                 unique.append(int(i))
         return True
 
-class Game: 
-    def play(num_str, secret_nums): 
-        cow_numbers = [] 
-        bull_numbers = [] 
-        try: 
+class Game:
+    def play(num_str, secret_nums):
+        num_str = list(num_str)
+        cow_numbers = 0
+        bull_numbers = 0
+        try:
             for i in range(len(num_str)):
                 if secret_nums[i] == int(num_str[i]):
-                    bull_numbers.append(i)
+                    bull_numbers += 1
                 elif int(num_str[i]) in secret_nums:
-                    cow_numbers.append(i)
-            return cow_numbers, bull_numbers 
+                    cow_numbers += 1
+            return cow_numbers, bull_numbers
+
         except:
             return cow_numbers, bull_numbers
-        
